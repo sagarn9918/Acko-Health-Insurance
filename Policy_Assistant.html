@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ask about this plan: grounded policy assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--p:#5B2BD9;--p2:#F3EFFD;--p3:#E6DEFB;--ink:#16141F;--ink2:#5E5A6E;--line:#E4E1EC;--bg:#FAF9FC;--ok:#1E7A4C;--okbg:#E8F5EC;--warn:#9A5B00;--warnbg:#FFF4E0;--font:'Outfit',system-ui,-apple-system,'Segoe UI',sans-serif}
+*{box-sizing:border-box}html,body{margin:0}body{font-family:var(--font);color:var(--ink);background:var(--bg);font-size:15px;line-height:1.45}
+.banner{background:#E9E6F2;color:var(--ink2);font-size:12px;text-align:center;padding:6px 12px}
+header{background:#fff;border-bottom:1px solid var(--line)}
+.hwrap{max-width:820px;margin:0 auto;padding:12px 16px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px}
+.dot{width:28px;height:28px;border-radius:9px;background:var(--p);display:grid;place-items:center;color:#fff}
+.tabs{display:flex;gap:4px;background:var(--p2);padding:4px;border-radius:999px}
+.tabs button{border:0;background:transparent;padding:7px 14px;border-radius:999px;font:inherit;font-weight:600;color:var(--ink2);cursor:pointer}
+.tabs button.on{background:#fff;color:var(--p);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+select{font:inherit;padding:7px 10px;border-radius:999px;border:1px solid var(--line);background:#fff}
+main{max-width:820px;margin:0 auto;padding:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px}
+.quote{display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;font-size:14px}
+.quote b{font-weight:600}.muted{color:var(--ink2)}.small{font-size:12.5px}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--p2);color:var(--p)}
+.chat{display:flex;flex-direction:column;gap:12px;margin:14px 0;min-height:120px}
+.msg{max-width:92%;padding:12px 14px;border-radius:16px}
+.me{align-self:flex-end;background:var(--p);color:#fff;border-bottom-right-radius:6px}
+.bot{align-self:flex-start;background:#fff;border:1px solid var(--line);border-bottom-left-radius:6px}
+.bot .ans{font-size:15.5px}
+.checks{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chk{font-size:12px;padding:3px 8px;border-radius:999px;background:var(--okbg);color:var(--ok);font-weight:600}
+.chk.bad{background:var(--warnbg);color:var(--warn)}
+.cite{margin-top:10px;border-left:3px solid var(--p);background:var(--p2);padding:8px 10px;border-radius:0 10px 10px 0;font-size:13.5px}
+.cite .cl{font-weight:700;color:var(--p);font-size:12.5px}
+.cite mark{background:#FFE58F;padding:0 2px;border-radius:3px}
+details{margin-top:6px}summary{cursor:pointer;color:var(--p);font-weight:600;font-size:12.5px}
+.full{max-height:220px;overflow:auto;font-size:12.5px;color:var(--ink2);background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px;margin-top:6px}
+.row{display:flex;gap:8px;align-items:center}
+.inbar{position:sticky;bottom:0;background:var(--bg);padding:10px 0 14px}
+.inbox{display:flex;gap:8px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 6px 6px 16px;align-items:center}
+.inbox input{flex:1;border:0;font:inherit;outline:none;min-width:0;background:transparent}
+.ib{border:0;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;cursor:pointer;background:var(--p2);color:var(--p);flex:none}
+.ib.send{background:var(--ink);color:#fff}.ib.rec{background:#E5484D;color:#fff;animation:pulse 1.2s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 6px rgba(229,72,77,.18)}}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{border:1px solid var(--p3);background:#fff;color:var(--ink);border-radius:999px;padding:7px 12px;font:inherit;font-size:13.5px;cursor:pointer}
+.chip:hover{border-color:var(--p);color:var(--p)}
+.act{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.btn.dark{background:var(--ink);color:#fff;border-color:var(--ink)}
+.notice{background:var(--warnbg);color:var(--warn);border-radius:10px;padding:8px 10px;font-size:13px;margin-top:8px}
+.typing{display:inline-flex;gap:4px}.typing i{width:6px;height:6px;border-radius:50%;background:var(--ink2);opacity:.4;animation:b 1s infinite}.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes b{50%{opacity:1;transform:translateY(-2px)}}
+.steps{counter-reset:s;display:flex;flex-direction:column;gap:10px}
+.step{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:start}
+.step .n{width:30px;height:30px;border-radius:50%;background:var(--p);color:#fff;display:grid;place-items:center;font-weight:700}
+pre{white-space:pre-wrap;background:#1E1B2E;color:#EDEAF7;padding:12px;border-radius:10px;font-size:12.5px;line-height:1.5;overflow:auto;max-height:360px}
+h2{font-size:18px;margin:18px 0 8px}h3{font-size:15px;margin:14px 0 6px}
+table{border-collapse:collapse;width:100%;font-size:13.5px}td,th{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}th{background:var(--p2)}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+<div class="banner">Concept for an Airtribe PM capstone (Step 8). Clause text is quoted from the Acko Health II policy wording (UIN ACKHLIP27042V022627). Quote details are sample data. Not an official Acko product.</div>
+<header><div class="hwrap">
+ <div class="brand"><span class="dot"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span><span id="t-title">Ask about this plan</span></div>
+ <div class="row"><div class="tabs"><button class="on" data-tab="chat" id="t-tab1">Assistant</button><button data-tab="how" id="t-tab2">How it works</button></div>
+ <button type="button" class="btn" id="reset" title="Start a new chat">↺ <span id="t-reset">New chat</span></button><select id="lang" aria-label="Language"><option value="en">English</option><option value="hi">हिंदी</option><option value="kn">ಕನ್ನಡ</option><option value="ta">தமிழ்</option></select></div>
+</div></header>
+
+<main>
+<section id="v-chat">
+ <div class="card">
+  <div class="row" style="justify-content:space-between"><span class="pill" id="t-yourquote">Your quote (sample)</span><span class="small muted" id="t-only">Answers come only from the policy wording and this quote</span></div>
+  <div class="quote" style="margin-top:10px">
+   <div><span class="muted" id="t-members">Members</span><br><b>Rohan (27), Mother (55)</b></div>
+   <div><span class="muted" id="t-si">Sum insured · premium</span><br><b>Rs 25 lakh · Rs 14,500 a year</b></div>
+   <div><span class="muted" id="t-declared">Declared condition</span><br><b>Mother: high blood pressure</b></div>
+   <div><span class="muted" id="t-waits">Waiting periods in the schedule</span><br><b>30 days · 24 months · 36 months</b></div>
+  </div>
+ </div>
+ <div class="chat" id="chat"></div>
+ <div class="chips" id="chips"></div>
+ <div class="inbar"><form class="inbox" id="form"><input id="q" autocomplete="off" placeholder="Ask about this plan, or tap the mic"><button type="button" class="ib hide" id="mic" aria-label="Speak your question"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button><button class="ib send" aria-label="Send"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button></form>
+ <div class="small muted" id="status" style="margin-top:6px;padding-left:6px"></div></div>
+</section>
+
+<section id="v-how" class="hide">
+ <div class="card">
+  <h2 style="margin-top:0">How an answer is made and checked</h2>
+  <p class="muted" style="margin-top:0">The assistant can only say what the policy wording or the buyer's quote says. Claude drafts the answer; the page checks the draft in code before the buyer sees it. If any check fails, the buyer gets the policy text itself, not a summary.</p>
+  <div class="steps">
+   <div class="step"><span class="n">1</span><div><b>Route the question.</b> Claude sorts it into policy, advice, medical or other, and picks up to 3 clauses from a fixed list of 20. Advice and medical questions never reach step 2: they get a fixed reply and an offer to talk to a person.</div></div>
+   <div class="step"><span class="n">2</span><div><b>Draft from the clauses only.</b> Claude gets the question, the buyer's quote facts and the full text of the chosen clauses, nothing else. It must quote the exact words it relied on, or say it can't answer.</div></div>
+   <div class="step"><span class="n">3</span><div><b>Check the draft in code.</b> Every quote must appear word for word in the clause it cites; every number in the answer must appear in the cited clauses, the quote facts or the question; advice phrases are blocked; the answer must stay short.</div></div>
+   <div class="step"><span class="n">4</span><div><b>Show or fall back.</b> A draft that passes is shown with its quotes highlighted and the checks it passed. A draft that fails is replaced by the clause text and a 'Talk to a person' button.</div></div>
+  </div>
+  <h3>Check results for the last answer</h3>
+  <div id="lastlog" class="small muted">Ask a question first.</div>
+  <h3>Prompt 1: router</h3><pre id="p1"></pre>
+  <h3>Prompt 2: grounded answer</h3><pre id="p2"></pre>
+  <h3>Verifier rules (run in the page, not by the model)</h3>
+  <table><tr><th>Check</th><th>Rule</th><th>If it fails</th></tr>
+   <tr><td>Citations exist</td><td>At least one citation, each to a clause that was sent to Claude</td><td>Show the clause text instead</td></tr>
+   <tr><td>Quotes are exact</td><td>Each quote, after normalising spaces and quote marks, appears word for word in its clause (at least 4 words)</td><td>Show the clause text instead</td></tr>
+   <tr><td>Numbers are grounded</td><td>Every number in the English and translated answer appears in the cited clauses, the quote facts or the question (a waiting period's end month, such as month 25 after a 24-month wait, is allowed)</td><td>Show the clause text instead</td></tr>
+   <tr><td>No advice</td><td>The English answer contains none of: you should, we recommend, I recommend, I suggest, best plan, best option, best for you, you must, guaranteed, don't worry</td><td>Show the clause text instead</td></tr>
+   <tr><td>Short</td><td>English answer of 120 words or fewer</td><td>Show the clause text instead</td></tr></table>
+  <h3>Clause library (20 clauses)</h3><div id="lib" class="small"></div>
+ </div>
+</section>
+</main>
+
+<script>
+const CLAUSES = {"3.2.1": {"title": "In-patient hospitalisation", "text": "In the event of hospitalization, we will cover the following medical expenses for anyone insured in the policy • Hospital room rent (Includes associated medical expenses like RMO, Nursing and Monitoring charges) • ICU/CCU/HDU charges • Operation room charges • Treating Medical practitioner / doctor fees Acko Health II • Medicines prescribed by the treating medical practitioner / doctor, used in the treatment • Diagnostic tests directly related to the current hospitalization • Surgical or medical appliance(s) prescribed by the treating medical practitioner/doctor (e.g. a stent) • Associated medical expenditures including Intravenous fluids, blood transfusion, surgical appliances used, consumables (if opted) and/or enteral feedings. Operation theatre charges. • The cost of prosthetics and other devices or equipment, if implanted internally during Surgery.(Note: External prosthesis are not covered) Note: Some expenses in Annexure 1 may not be covered in your policy, unless you buy a plan including those benefits. The terms of your policy will be written in your policy schedule."}, "3.2.2": {"title": "Room rent and ICU", "text": "If anyone insured under the policy is hospitalized, we will cover the room rent charges for the room category and ICU charges during hospitalization stay as specified in the policy schedule. Note: • While the nomenclature of the Room Category might differ from one hospital to another, we will use the specification and description of the room category to determine the applicable room category and rent limits for each hospitalization. • If you avail a room with room category / room rent / ICU charges higher than those mentioned in the policy schedule, then you will have to bear a part of the total admissible in-patient medical expenses (including surcharges, taxes, etc.). The expenses that you will have to bear in such a case would be proportional to the difference between the room rent actually availed and the room rent limit specified in the policy schedule. Example: If you have opted for a room category with a limit of Rs. 2000 per day in the policy but you select a room with charges of Rs. 4000 per day during hospitalization, the availed room rent is two times the specified limit. So, we will cover and pay for only half the medical expenses in the final bill (i.e. reduce the bill proportionally by two). This is done as medical expenses such as doctor’s fee, surgery costs, etc. depend on the room rent opted for. However, the proportional deduction will not be applicable for medicines and other items that are billed at MRP."}, "3.2.4": {"title": "Pre- and post-hospitalisation expenses", "text": "We will cover all the relevant (to the hospitalization/daycare event) medical expenses including consultations, investigations, diagnostics and medicines that are incurred towards pre-hospitalization and post-hospitalization of anyone insured under the policy."}, "4.1.1": {"title": "Pre-existing diseases", "text": "a. Expenses related to the treatment of a pre-existing Disease (PED) and its direct complications shall be excluded until the expiry of number of months, as specified in the Policy Schedule, of continuous coverage after the date of inception of the first policy with insurer. b. In case of enhancement of sum insured the exclusion shall apply afresh to the extent of sum insured increase. c. If the Insured Person is continuously covered without any break as defined under the portability norms of the extant IRDAI (Insurance Product) Regulations 2024, then waiting period for the same would be reduced to the extent of prior coverage. d. Coverage under the policy after the expiry of number of months, as specified in the Policy Schedule, for any pre-existing disease is subject to the same being declared at the time of application and accepted by Insurer without any specific condition exclusion."}, "4.1.2": {"title": "Specified disease or procedure waiting period", "text": "a. Expenses related to the treatment of the listed Conditions, surgeries/treatments shall be excluded until the expiry of number of months, as specified in the Policy Schedule, of continuous coverage after the date of inception of the first policy with us. This exclusion shall not be applicable for claims arising due to an accident. b. In case of enhancement of sum insured the exclusion shall apply afresh to the extent of sum insured increase. c. If any of the specified disease/procedure falls under the waiting period specified for pre-existing diseases, then the longer of the two waiting periods shall apply. d. The waiting period for listed conditions shall apply even if contracted after the policy. e. The waiting period for listed conditions shall apply even if declared and accepted without a specific exclusion or Pre-existing disease waiting period. f. The waiting period for listed conditions shall apply even if contracted after the policy or declared and accepted without a waiting period. g. If the Insured Person is continuously covered without any break as defined under the applicable norms on portability stipulated by IRDAI, then waiting period for the same would be reduced to the extent of prior coverage. h. List of specific diseases/procedures: 1. Eyes: Cataract, Glaucoma and other disorders of lens, disorders of Retina 2. Stone: Pancreatitis and Stones in Biliary and Urinary System 3. Genitourinary: Abnormal Utero-vaginal bleeding, female genital Prolapse, Endometriosis/Adenomyosis, Fibroids, PCOD, or any condition requiring dilation and curettage or Hysterectomy, Any Surgery of the genitourinary system unless necessitated by malignancy. 4. Cysts, Tumor: All internal or external benign or In Situ Neoplasms/Tumors, Cyst, Sinus, Polyp, Nodules, Swelling, Mass or Lump, 5. Prostate: Hyperplasia of Prostate, Hydrocele, Varicocele and spermatocele 6. Rectal: Hemorrhoids, Fissure or Fistula or Abscess of anal and rectal region, Pilonidal Sinus & Rectal Prolapse under Rectal disease. 7. Hernia: Hernia of all sites 8. Arthritis: Osteoarthritis, Systemic Connective Tissue disorders, Dorsopathies, Spondylopathies, inflammatory Polyarthritis, Arthrosis such as Rheumatoid Arthritis, Gout, Intervertebral Disc disorders, Joint Replacement Surgeries (other than caused by Accident) 9. Kidney: Chronic kidney disease and failure 10. Varicose veins: Varicose veins of lower extremities 11. Ear, Nose, Throat: Disease of middle ear and mastoid including Otitis Media, Cholesteatoma, Perforation of Tympanic Membrane, Tonsils and Adenoids, Nasal Septum and Nasal Sinuses/Polyp 12. Internal Congenital: Internal Congenital Anomaly 13. Gastro: Gastritis, Gastroesophageal Reflux Disorder, Ulcer, Erosion and Varices of Upper Gastrointestinal Tract 14. Ligament, Tendon & Meniscal Tear Bengaluru, Karnataka: 56 15. Neurodegenerative disorders: Conditions affecting the brain and nervous system like Parkinson's, Alzheimer's disease, Dementia etc. 16. Any other specific conditions in Schedule: Any other condition or treatment mentioned under this head in the Schedule will have a waiting period as specified in the Schedule."}, "4.1.3": {"title": "30-day waiting period", "text": "a. Expenses related to the treatment of any illness within 30 days from the first policy commencement date shall be excluded except claims arising due to an accident, provided the same are covered. b. This exclusion shall not, however, apply if the Insured Person has Continuous Coverage for more than twelve months. c. The within referred waiting period is made applicable to the enhanced sum insured in the event of granting higher sum insured subsequently."}, "4.1.8": {"title": "Cosmetic or plastic surgery", "text": "Expenses for cosmetic or plastic surgery or any treatment to change appearance unless for reconstruction following an Accident, Burn(s) or Cancer or as part of medically necessary treatment to remove a direct and immediate health risk to the insured. For this to be considered a medical necessity, it must be certified by the attending Medical Practitioner."}, "4.2.1": {"title": "Non-payable expenses", "text": "We shall not be liable to pay the expenses towards those listed in Annexure 1 for any claim under Basic Benefit 3.2.1 (In-patient Hospitalization), Basic Benefit 3.2.3 (Day Care Treatment) or Basic Benefit 3.2.7 (Domiciliary Treatment Cover)."}, "4.2.3": {"title": "Permanent exclusions (cannot be waived)", "text": "We shall not be liable to make any payment under this Policy for any Basic Benefits or Basic Benefit Options arising from or caused by any of the following applicable for other than Personal Accident Add-on Benefits): 1. Suicide: Treatment for condition arising out of any insured Person committing or attempting to commit self harm or attempted suicide. 2. Dental: Treatment, procedures and preventive, diagnostic, restorative, cosmetic services related to disease, disorder and conditions related to natural teeth and Gingiva unless necessitated under inpatient or pre/post hospitalization care due to an Accident. 3. Circumcision: Circumcisions (unless necessitated by Illness or Injury and forming part of treatment); aesthetic. 4. Prosthetics and Other Devices: Prosthetics and other devices not implanted internally by surgery. 5. War and Exposure to Hazardous Substances: Treatment for any Injury or Illness resulting directly or indirectly from nuclear, radiological emissions, war or war like situations (whether war is declared or not), rebellion (act of armed resistance to an established government or leader), acts of terrorism, nuclear, biological or chemical emissions, rebellion, revolution, acts of terrorism. 6. Hormonal Therapies: Growth hormone therapy and/or any form of hormone replacement therapy (HRT) and/or administration of other hormonal medication. 7. Substance abuse and addictions: Expenses incurred for the treatment of any illness or injury which is a consequence of: • Alcohol intake, drug or substance abuse or any addictive condition and consequences thereof and. • Withdrawal and de-addiction • Treatment of Withdrawal and de-addiction.; and • Cancer of oral, oropharynx and respiratory system is specifically excluded in a tobacco user. However, it is hereby clarified that the foregoing exclusions do not exclude any cover under the Policy towards impairment of Persons' intellectual faculties by usage of drugs, stimulants or depressants as prescribed by a Medical Practitioner. 8. Sleep Disorders: Treatment for any conditions related to disturbance of normal sleep patterns or behaviors such as Sleep-apnea, snoring, etc."}, "5.1.1": {"title": "Disclosure of information", "text": "The Policy shall be void ab-initio and all premium paid thereon shall be forfeited to the Company in the event of established fraud or misrepresentation, mis-description or non-disclosure of any material fact. \"Material facts\" for the purpose of this policy shall mean all relevant information sought by the company in the proposal form and other connected documents to enable it to take informed decision in the context of underwriting the risk."}, "5.1.13": {"title": "Renewal of policy", "text": "The policy shall ordinarily be renewable except on grounds of established fraud, non-disclosure, misrepresentation by the insured person, provided the policy is not withdrawn. The Company shall endeavor to give notice for renewal. However, the Company is not under obligation to give any notice for renewal. 1. Renewal shall not be denied on the ground that the insured had made a claim or claims in the preceding policy years 2. Request for renewal along with requisite premium shall be received by the Company before the end of the Policy Period. 3. At the end of the Policy Period, the policy shall terminate and can be renewed within the Grace Period of 30 days to maintain continuity of benefits. However, We will not be liable to pay for any claim arising out of an Injury or Accident that occurred during the Grace Period. 4. No loading shall apply on renewals based on individual claims experience. 5. If not renewed within Grace Period after due renewal date, the Policy shall terminate. 6. The Company shall not resort to fresh underwriting unless there is an increase in sum insured. In case increase in sum insured is requested by the Policyholder, the Insurer may underwrite only to the extent of increased sum insured or enhancement in coverage. 7. Renewal premium due can be paid prior to the due date as per norms set out by the Company"}, "5.1.16": {"title": "Free look period", "text": "The Free Look Period shall be applicable at the inception of the Policy and not on renewals or at the time of porting the policy. The insured shall be allowed a period of thirty days (30 days) from date of receipt of the Policy to review the terms and conditions of the Policy, and to return the same if not acceptable. If the insured has not made any claim during the Free Look Period, the insured shall be entitled to 1. a refund of the premium paid less any expenses incurred by the Company on medical examination of the insured person and the stamp duty charges; or 2. where the risk has already commenced and the option of return of the Policy is exercised by the insured, a deduction towards the proportionate risk premium for period of cover or 3. Where only a part of the insurance coverage has commenced, such proportionate premium commensurate with the insurance coverage during such period."}, "5.1.18": {"title": "Change of sum insured", "text": "Sum insured can be changed (increased/ decreased) only at the time of renewal or at any time, subject to underwriting by the Company. For any increase in SI, the waiting period shall start afresh only for the enhanced portion of the sum insured."}, "5.2.7": {"title": "Adding or removing a member", "text": "We shall include/exclude any person as an Insured Person under the Policy in accordance with the following procedure: (a) Additions Any person may be added to the Policy as an Insured Person during the Policy Year provided that the application for cover has been accepted by Us, applicable premium for the risk coverage duration for the Insured Person has been received by Us and We have issued an endorsement confirming the addition of such person as an Insured Person under the Policy. (b) Deletions Any Insured Person who is covered under the Policy may be deleted upon Your request during the Policy Year. Refund of premium can be made on pro-rata basis, provided that no claim is paid / outstanding in respect of that Insured Person or his/her dependents. In case of refund of premium being generated on the Policy due to deletion of an Insured Person, the same will be refunded or adjusted against any future premium instalments due and payable under the Policy. Acko Health II Throughout the Policy Year, You will notify Us in writing, of any and all changes in the membership of the Policy in the same month in which the change occurs."}, "5.2.13": {"title": "Portability", "text": "The Insured Person will have the option to port the Policy to other insurers as per extant Guidelines related to portability. If such person is presently covered and has been continuously covered without any lapses under any health insurance plan with an Indian General/Health insurer as per Guidelines on portability, the proposed Insured Person will get all the accrued continuity benefits in waiting periods as under: 1. The waiting periods specified in Section 4.1.1, 4.1.2 & 4.1.3 shall be reduced by the number of continuous preceding years of coverage of the Insured Person under the previous health insurance Policy. 2. Portability benefit will be offered to the extent of sum of previous sum insured and accrued bonus (as part of the base sum insured), portability benefit shall not apply to any other additional increased Sum Insured. 3. Continuity of Benefits will be provided for the period based on the number of years of continuous coverage under this Policy with Us. 4. The application of Portability should have been received by Us at least 30 days before, but not earlier than 60 days from the due date for renewal. 5. We can consider proposal for portability even if the Policyholder has approached within 15 days from the renewal date of the existing policy, but there shall not be any break in policy. 6. For porting to another health insurance policy available with Us, We may subject such proposal to Our medical underwriting and decide the terms and conditions upon which We may offer cover, the decision as to which shall be in Our sole and absolute discretion. 7. Subject to the decision of Our underwriting team, We will decide the terms and conditions upon which We may offer cover, the decision as to which shall be in Our sole and absolute discretion, subject to board approved Underwriting Policy. […]"}, "6.1.3": {"title": "Cashless claims", "text": "Cashless claim is a process where you can have your insurance company pay a network hospital directly before discharge rather than requiring you to register a reimbursement claim after discharge from a hospital. In most cases, you will have some part of the claim to pay after you are discharged (except if you have paid for add-ons that cover these costs and they are applicable), e.g. any non- covered expenses, any expenses exceeding your sum insured or sub-limits, a co-pay or a deductible. You will be responsible to pay this amount directly to the hospital. Pre-Authorization Process The Insured Person can avail Cashless facility at the time of admission into any Network Provider by presenting the health card as provided by Us with this Policy along with a photo identification proof and address proof (voter ID card / driving license / passport / PAN card / any other identity proof as approved by Us). 1. For Planned Hospitalization: a) You shall at least 3 days prior to the Date of Admission to the Hospital approach the Network Provider for Hospitalization for undergoing medical Treatment. b) The Network Provider will issue the request for authorization letter for Hospitalization in the preauthorization form. c) The Network Provider shall send the pre-authorization form along with all the relevant details to the 24-hour authorization/ cashless department along with contact details of the treating Medical Practitioner and the Insured Person. d) Upon receiving the pre-authorization form and all related medical information from the Network Provider, We will verify the eligibility of cover under the Policy. e) Wherever the information provided in the request is sufficient to ascertain the authorization and the claim is admissible, We shall issue the authorization letter to the Network Provider. […]"}, "6.1.4": {"title": "Reimbursement claims", "text": "Wherever you have opted for a reimbursement of Medical Expenses, you may submit the following documents for reimbursement of the claim to Our branch or head office at your own expense not later than 15 days from the date of discharge from the Hospital. You can download a copy of claim form from Our website www.acko.com/gi or initiate the reimbursement claim process on app or website directly. The list of necessary claim documents to be submitted for reimbursement in case of hospitalization are as following: (Note: The Company reserves the right to verify the authenticity and validity of such documents and the Hospital's credentials) • Claim form duly filled and signed by the insured • Original Discharge/Day Care/Transfer summary • Original Death Summary (in case of death) • Copy of the Hospital’s Registration Certificate/ Hospital Registration number in case of Hospitalization in any non-Network Provider of the Company or certificate from Hospital authorities detailing the facilities available including number of beds (to be submitted wherever required by the Company) • Original hospital bill with detailed break-up of charges applied by hospital • • • • • • • Acko Health II Original payment receipts with receipt numbers & stamp/ seal of the provider Original Pharmacy/ medicine receipts with receipt numbers & stamp / seal of the provider Copy of Invoice/Stickers/barcode in case of implants Copy of all Laboratory and test reports along with prescription by Medical Practitioner and invoice / bill with receipt from diagnostic center First consultation paper from doctor stating the origin duration and progress of illness All previous consultation papers indicating history and treatment details for current Illness and advice for current Hospitalization Copy of FIR/ MLC certificate (Accident claims) • History of alcohol consumption or any intoxication at the time of incident, certified by first treating doctor in case of Accident cases • Copy of medical prescription • Copy of indoor case papers with nursing sheet detailing medical history of the Insured Person, treatment details, and patient’s progress (to be submitted wherever required by the Company) • Original invoices for the expenses incurred towards ambulance facility along with details of loss in the Company’s prescribed format • Invoice for vaccination and payment receipt • Duly filled NEFT Mandate form (NEFT details and cancelled cheque of the proposer with Name of the client/ Bank Name / IFSC code and account number or First page of passbook with Name of the client/ Bank Name/IFSC code and account number) • A copy of your Aadhaar card, or any other government photo ID and PAN Card. […]"}, "5.2.14": {"title": "Underwriting loadings and conditions", "text": "a. We may apply risk loading on the premium payable (excluding statutory levies and taxes) or special conditions on the Policy based upon the health status of the persons proposed to be insured and declarations made at the time of enrolment. These loadings be applied from the Commencement Date of the first Policy including subsequent Renewal(s) with Us. There will be no loadings based on individual claims experience. b. We may apply a specific Sub Limit on a medical condition/ailment depending on the past history and declarations, or additional Waiting Periods on Pre-Existing Diseases or exclusion as part of the special Conditions specified in the Schedule. c. We shall inform You about the applicable risk loading or special condition through a counteroffer letter and You would be required to respond with Your consent and additional premium (if any) within 7 working days of the issuance of such counter offer letter. d. In case, You neither accept the counteroffer nor respond to Us within 7 working days, We shall cancel Your application and refund the premium paid. Your Policy will not be issued unless We receive Your consent."}, "Def 33": {"title": "Moratorium period (definition 33)", "text": "Moratorium Period means the period of sixty continuous months of coverage (including portability and migration) in health insurance policy. Upon completion of which, no policy and claim shall be contestable by Us on grounds of non-disclosure and/or misrepresentation, except on grounds of established fraud and permanent exclusions specified in the policy schedule. The moratorium would be applicable for the sums insured of the first policy. Wherever, the sum insured is enhanced, completion of sixty continuous months would be applicable from the date of enhancement of sums insured only on the enhanced limits. The policies would however be subject to all limits, sub-limits, co-payments, and/or deductibles as per the policy schedule."}, "Def 19": {"title": "Grace period (definition 19)", "text": "Grace Period means the specified period of time, immediately following the premium due date during which premium payment can be made to renew or continue a policy in force without loss of continuity benefits pertaining to waiting periods and coverage of pre-existing diseases. In Case of Premium Payment in instalments: a) The grace period of fifteen days (where premium is paid on a monthly instalments) and thirty days (where premium is paid in quarterly/half yearly/annual instalments) is available on the premium due date, to pay the premium. b) If the premium is paid in instalments during the policy period, coverage will be available for the grace period also. In case of Renewal: If the policy is renewed during grace period of 30 days, all the credits (sum insured, No Claim Bonus, Specific Waiting periods, waiting periods for pre-existing diseases, Moratorium period etc.) accrued under the policy shall be protected. However, We will not be liable to pay for any claim arising out of an Injury or Accident that occurred during the Grace Period."}};
+const QUOTE_FACTS = [
+ "Policy: Acko Health II (sample quote). Members: Rohan, age 27; Mother, age 55.",
+ "Sum insured: Rs 25 lakh (2500000). Premium: Rs 14,500 a year for both members.",
+ "Mother has declared high blood pressure. Rohan has declared no condition.",
+ "Waiting periods in this sample schedule: initial waiting period 30 days for any illness (not accidents); listed conditions (clause 4.1.2, including cataract) 24 months; Mother's declared pre-existing condition (high blood pressure and its direct complications) 36 months.",
+ "Room rent: no limit on this plan. Co-pay: none. Add-ons: none.",
+ "The policy has not started yet; months are counted from the start of the first policy."
+];
+const LANG_NAME={en:"English",hi:"Hindi",kn:"Kannada",ta:"Tamil"};
+const UI={
+ en:{reset:"New chat",title:"Ask about this plan",tab1:"Assistant",tab2:"How it works",yourquote:"Your quote (sample)",only:"Answers come only from the policy wording and this quote",members:"Members",si:"Sum insured · premium",declared:"Declared condition",waits:"Waiting periods in the schedule",ph:"Ask about this plan, or tap the mic",
+  hello:"Hi Rohan. Ask me anything about this plan, in English, Hindi, Kannada or Tamil. I'll answer only from the policy wording and your quote, and show you the exact lines I used.",
+  advice:"I can explain what this policy says, but I can't tell you which plan, cover amount or declaration is right for you. That's your decision. I can explain any part of the policy, or you can talk to a person.",
+  medical:"I can't give medical advice; please ask a doctor. I can tell you how the policy treats a condition, for example its waiting period.",
+  other:"I can only answer questions about this plan and your quote.",
+  fallback:"I can't put this into plain words safely, so here's exactly what the policy says:",
+  offline:"Live answers aren't available in this view, so here's exactly what the policy says:",
+  none:"I couldn't find a part of the policy that answers this. You can talk to a person from the team.",
+  handover:"Talk to a person",handed:"In the live product this connects you to the support team. Prototype: nothing is sent.",listen:"Listen",clause:"Clause",full:"Read the full clause",
+  ok1:"Quotes match the policy word for word",ok2:"Numbers come from the policy or your quote",ok3:"No advice",thinking:"Checking the policy…",
+  chips:["Is Mother's BP covered from day one?","Mother needs cataract surgery in month 10. Who pays?","What happens if I didn't declare something?","Can I cancel after buying?","Can I add my father later?","Is there a room rent limit?","Which plan should I buy?"]},
+ hi:{reset:"नई चैट",title:"इस प्लान के बारे में पूछें",tab1:"सहायक",tab2:"यह कैसे काम करता है",yourquote:"आपका कोट (नमूना)",only:"जवाब सिर्फ़ पॉलिसी और इस कोट से",members:"सदस्य",si:"बीमा राशि · प्रीमियम",declared:"बताई गई बीमारी",waits:"शेड्यूल में वेटिंग पीरियड",ph:"इस प्लान के बारे में पूछें, या माइक दबाएँ",
+  hello:"नमस्ते रोहन। इस प्लान के बारे में कुछ भी पूछें। मैं सिर्फ़ पॉलिसी के शब्दों और आपके कोट से जवाब दूँगा, और वही लाइनें दिखाऊँगा जिनसे जवाब लिया है।",
+  advice:"मैं बता सकता हूँ कि पॉलिसी क्या कहती है, लेकिन कौन सा प्लान, कितना कवर या क्या घोषित करना है, यह मैं नहीं बता सकता। यह आपका फ़ैसला है। आप किसी व्यक्ति से बात कर सकते हैं।",
+  medical:"मैं मेडिकल सलाह नहीं दे सकता; कृपया डॉक्टर से पूछें। मैं बता सकता हूँ कि पॉलिसी किसी बीमारी को कैसे कवर करती है, जैसे उसका वेटिंग पीरियड।",
+  other:"मैं सिर्फ़ इस प्लान और आपके कोट से जुड़े सवालों के जवाब दे सकता हूँ।",
+  fallback:"मैं इसे सुरक्षित रूप से आसान शब्दों में नहीं कह सकता, इसलिए पॉलिसी के असली शब्द यहाँ हैं:",
+  offline:"यहाँ लाइव जवाब उपलब्ध नहीं हैं, इसलिए पॉलिसी के असली शब्द यहाँ हैं:",
+  none:"मुझे पॉलिसी में इसका जवाब नहीं मिला। आप किसी व्यक्ति से बात कर सकते हैं।",
+  handover:"किसी व्यक्ति से बात करें",handed:"असली प्रोडक्ट में यह आपको सपोर्ट टीम से जोड़ेगा। प्रोटोटाइप: कुछ भेजा नहीं जाता।",listen:"सुनें",clause:"क्लॉज़",full:"पूरा क्लॉज़ पढ़ें",
+  ok1:"उद्धरण पॉलिसी से हूबहू मेल खाते हैं",ok2:"संख्याएँ पॉलिसी या आपके कोट से हैं",ok3:"कोई सलाह नहीं",thinking:"पॉलिसी देख रहा हूँ…",
+  chips:["क्या माँ का BP पहले दिन से कवर है?","माँ को 10वें महीने में मोतियाबिंद की सर्जरी चाहिए। कौन भुगतान करेगा?","अगर मैंने कुछ नहीं बताया तो क्या होगा?","क्या मैं खरीदने के बाद रद्द कर सकता हूँ?","कौन सा प्लान खरीदूँ?"]},
+ kn:{reset:"ಹೊಸ ಚಾಟ್",title:"ಈ ಪ್ಲಾನ್ ಬಗ್ಗೆ ಕೇಳಿ",tab1:"ಸಹಾಯಕ",tab2:"ಇದು ಹೇಗೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ",yourquote:"ನಿಮ್ಮ ಕೋಟ್ (ಮಾದರಿ)",only:"ಉತ್ತರಗಳು ಪಾಲಿಸಿ ಮತ್ತು ಈ ಕೋಟ್‌ನಿಂದ ಮಾತ್ರ",members:"ಸದಸ್ಯರು",si:"ವಿಮಾ ಮೊತ್ತ · ಪ್ರೀಮಿಯಂ",declared:"ತಿಳಿಸಿದ ಕಾಯಿಲೆ",waits:"ಶೆಡ್ಯೂಲ್‌ನಲ್ಲಿನ ಕಾಯುವ ಅವಧಿಗಳು",ph:"ಈ ಪ್ಲಾನ್ ಬಗ್ಗೆ ಕೇಳಿ, ಅಥವಾ ಮೈಕ್ ಒತ್ತಿ",
+  hello:"ನಮಸ್ಕಾರ ರೋಹನ್. ಈ ಪ್ಲಾನ್ ಬಗ್ಗೆ ಏನು ಬೇಕಾದರೂ ಕೇಳಿ. ನಾನು ಪಾಲಿಸಿಯ ಪದಗಳು ಮತ್ತು ನಿಮ್ಮ ಕೋಟ್‌ನಿಂದ ಮಾತ್ರ ಉತ್ತರಿಸುತ್ತೇನೆ, ಮತ್ತು ಬಳಸಿದ ಸಾಲುಗಳನ್ನು ತೋರಿಸುತ್ತೇನೆ.",
+  advice:"ಪಾಲಿಸಿ ಏನು ಹೇಳುತ್ತದೆ ಎಂದು ವಿವರಿಸಬಲ್ಲೆ, ಆದರೆ ಯಾವ ಪ್ಲಾನ್, ಎಷ್ಟು ಕವರ್ ಅಥವಾ ಏನು ತಿಳಿಸಬೇಕು ಎಂದು ಹೇಳಲಾರೆ. ಅದು ನಿಮ್ಮ ನಿರ್ಧಾರ. ನೀವು ಒಬ್ಬ ವ್ಯಕ್ತಿಯೊಂದಿಗೆ ಮಾತನಾಡಬಹುದು.",
+  medical:"ನಾನು ವೈದ್ಯಕೀಯ ಸಲಹೆ ನೀಡಲಾರೆ; ದಯವಿಟ್ಟು ವೈದ್ಯರನ್ನು ಕೇಳಿ. ಪಾಲಿಸಿ ಒಂದು ಕಾಯಿಲೆಯನ್ನು ಹೇಗೆ ನೋಡುತ್ತದೆ ಎಂದು ಹೇಳಬಲ್ಲೆ, ಉದಾಹರಣೆಗೆ ಅದರ ಕಾಯುವ ಅವಧಿ.",
+  other:"ನಾನು ಈ ಪ್ಲಾನ್ ಮತ್ತು ನಿಮ್ಮ ಕೋಟ್ ಬಗ್ಗೆ ಮಾತ್ರ ಉತ್ತರಿಸಬಲ್ಲೆ.",
+  fallback:"ಇದನ್ನು ಸುರಕ್ಷಿತವಾಗಿ ಸರಳ ಪದಗಳಲ್ಲಿ ಹೇಳಲಾಗುತ್ತಿಲ್ಲ, ಆದ್ದರಿಂದ ಪಾಲಿಸಿಯ ನಿಜವಾದ ಪದಗಳು ಇಲ್ಲಿವೆ:",
+  offline:"ಇಲ್ಲಿ ಲೈವ್ ಉತ್ತರಗಳು ಲಭ್ಯವಿಲ್ಲ, ಆದ್ದರಿಂದ ಪಾಲಿಸಿಯ ನಿಜವಾದ ಪದಗಳು ಇಲ್ಲಿವೆ:",
+  none:"ಪಾಲಿಸಿಯಲ್ಲಿ ಇದಕ್ಕೆ ಉತ್ತರ ಸಿಗಲಿಲ್ಲ. ನೀವು ಒಬ್ಬ ವ್ಯಕ್ತಿಯೊಂದಿಗೆ ಮಾತನಾಡಬಹುದು.",
+  handover:"ವ್ಯಕ್ತಿಯೊಂದಿಗೆ ಮಾತನಾಡಿ",handed:"ನಿಜವಾದ ಪ್ರಾಡಕ್ಟ್‌ನಲ್ಲಿ ಇದು ನಿಮ್ಮನ್ನು ಸಪೋರ್ಟ್ ತಂಡಕ್ಕೆ ಸಂಪರ್ಕಿಸುತ್ತದೆ. ಪ್ರೋಟೋಟೈಪ್: ಏನನ್ನೂ ಕಳುಹಿಸುವುದಿಲ್ಲ.",listen:"ಕೇಳಿ",clause:"ಕ್ಲಾಸ್",full:"ಪೂರ್ಣ ಕ್ಲಾಸ್ ಓದಿ",
+  ok1:"ಉಲ್ಲೇಖಗಳು ಪಾಲಿಸಿಯೊಂದಿಗೆ ಪದಶಃ ಹೊಂದುತ್ತವೆ",ok2:"ಸಂಖ್ಯೆಗಳು ಪಾಲಿಸಿ ಅಥವಾ ಕೋಟ್‌ನಿಂದ",ok3:"ಸಲಹೆ ಇಲ್ಲ",thinking:"ಪಾಲಿಸಿ ನೋಡುತ್ತಿದ್ದೇನೆ…",
+  chips:["ಅಮ್ಮನ BP ಮೊದಲ ದಿನದಿಂದ ಕವರ್ ಆಗುತ್ತದೆಯೇ?","ಅಮ್ಮನಿಗೆ 10ನೇ ತಿಂಗಳಲ್ಲಿ ಕ್ಯಾಟರಾಕ್ಟ್ ಸರ್ಜರಿ ಬೇಕು. ಯಾರು ಪಾವತಿಸುತ್ತಾರೆ?","ಖರೀದಿಸಿದ ನಂತರ ರದ್ದು ಮಾಡಬಹುದೇ?","ಯಾವ ಪ್ಲಾನ್ ಖರೀದಿಸಬೇಕು?"]},
+ ta:{reset:"புதிய உரையாடல்",title:"இந்த திட்டம் பற்றி கேளுங்கள்",tab1:"உதவியாளர்",tab2:"இது எப்படி வேலை செய்கிறது",yourquote:"உங்கள் கோட் (மாதிரி)",only:"பதில்கள் பாலிசி மற்றும் இந்த கோட்டிலிருந்து மட்டும்",members:"உறுப்பினர்கள்",si:"காப்பீட்டுத் தொகை · பிரீமியம்",declared:"தெரிவித்த நோய்",waits:"அட்டவணையில் காத்திருப்பு காலங்கள்",ph:"இந்த திட்டம் பற்றி கேளுங்கள், அல்லது மைக்கை அழுத்துங்கள்",
+  hello:"வணக்கம் ரோஹன். இந்த திட்டம் பற்றி எதையும் கேளுங்கள். பாலிசி வார்த்தைகள் மற்றும் உங்கள் கோட்டிலிருந்து மட்டுமே பதில் தருவேன், பயன்படுத்திய வரிகளையும் காட்டுவேன்.",
+  advice:"பாலிசி என்ன சொல்கிறது என்று விளக்க முடியும், ஆனால் எந்த திட்டம், எவ்வளவு காப்பீடு அல்லது எதைத் தெரிவிக்க வேண்டும் என்று சொல்ல முடியாது. அது உங்கள் முடிவு. நீங்கள் ஒருவரிடம் பேசலாம்.",
+  medical:"மருத்துவ ஆலோசனை தர முடியாது; மருத்துவரிடம் கேளுங்கள். பாலிசி ஒரு நோயை எப்படிப் பார்க்கிறது என்று சொல்ல முடியும், உதாரணமாக அதன் காத்திருப்பு காலம்.",
+  other:"இந்த திட்டம் மற்றும் உங்கள் கோட் பற்றிய கேள்விகளுக்கு மட்டுமே பதில் தர முடியும்.",
+  fallback:"இதை எளிய வார்த்தைகளில் பாதுகாப்பாகச் சொல்ல முடியவில்லை, எனவே பாலிசியின் உண்மையான வார்த்தைகள் இதோ:",
+  offline:"இங்கே நேரடி பதில்கள் கிடைக்கவில்லை, எனவே பாலிசியின் உண்மையான வார்த்தைகள் இதோ:",
+  none:"பாலிசியில் இதற்கான பதில் கிடைக்கவில்லை. நீங்கள் ஒருவரிடம் பேசலாம்.",
+  handover:"ஒருவரிடம் பேசுங்கள்",handed:"உண்மையான தயாரிப்பில் இது உங்களை சப்போர்ட் குழுவுடன் இணைக்கும். முன்மாதிரி: எதுவும் அனுப்பப்படாது.",listen:"கேளுங்கள்",clause:"பிரிவு",full:"முழு பிரிவையும் படியுங்கள்",
+  ok1:"மேற்கோள்கள் பாலிசியுடன் சொல்லுக்குச் சொல் பொருந்துகின்றன",ok2:"எண்கள் பாலிசி அல்லது கோட்டிலிருந்து",ok3:"ஆலோசனை இல்லை",thinking:"பாலிசியைப் பார்க்கிறேன்…",
+  chips:["அம்மாவின் BP முதல் நாளிலிருந்து காப்பீட்டில் உள்ளதா?","அம்மாவுக்கு 10வது மாதத்தில் கண்புரை அறுவை சிகிச்சை தேவை. யார் செலுத்துவார்?","வாங்கிய பின் ரத்து செய்யலாமா?","எந்த திட்டத்தை வாங்க வேண்டும்?"]}
+};
+let LANG="en"; const T=k=>(UI[LANG]&&UI[LANG][k])||UI.en[k];
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+const CATALOG=Object.entries(CLAUSES).map(([id,c])=>`${id} | ${c.title}`).join("\n");
+const ROUTER=(q)=>`You route questions for a health-insurance policy explainer. The buyer has a quote and asks a question, possibly in Hindi, Kannada, Tamil or English.
+
+Classify the question:
+- "policy": asks what the policy or this quote says, covers, excludes, or how a process works.
+- "advice": asks which plan, cover amount, add-on or declaration they should choose, whether to buy, or how this compares with other insurers.
+- "medical": asks about their health, symptoms, treatment or medicines.
+- "other": anything else.
+
+For "policy", pick up to 3 clause ids from the list that contain the answer. Use only ids from the list.
+
+Return JSON only, no prose:
+{"category":"policy|advice|medical|other","clause_ids":["..."],"question_en":"the question in English"}
+
+CLAUSE LIST (id | title):
+${CATALOG}
+
+QUESTION:
+${q}`;
+const ANSWER=(qen,lang,ids)=>`You explain a health-insurance policy to a first-time buyer. Use ONLY the QUOTE FACTS and POLICY TEXT below.
+
+Rules:
+1. Do not add any fact, number, condition, time period or example that is not in the QUOTE FACTS or POLICY TEXT.
+2. Do not recommend anything or tell the buyer what they should do. Do not give medical advice.
+3. If the QUOTE FACTS and POLICY TEXT don't answer the question, set "cannot_answer" to true and leave the answer empty.
+4. For every point you make, copy the exact words you relied on from the POLICY TEXT: 6 to 30 consecutive words, character for character, from one clause.
+5. Plain language, short sentences, at most 70 words. Write numbers as digits (0-9), also in the translated answer.
+6. When you say something is covered, add "subject to the policy terms".
+7. Write "answer_en" in English and "answer" in ${LANG_NAME[lang]}. Both must say the same thing.
+
+Return JSON only, no prose:
+{"cannot_answer":false,"answer_en":"...","answer":"...","citations":[{"clause_id":"...","quote":"..."}]}
+
+QUESTION:
+${qen}
+
+QUOTE FACTS:
+${QUOTE_FACTS.map(f=>"- "+f).join("\n")}
+
+POLICY TEXT:
+${ids.map(id=>`[${id}] ${CLAUSES[id].title}\n${CLAUSES[id].text}`).join("\n\n")}`;
+$("#p1").textContent=ROUTER("{buyer's question}");
+$("#p2").textContent=ANSWER("{question in English}","hi",["4.1.3"]).replace(/POLICY TEXT:\n[\s\S]*$/,"POLICY TEXT:\n{full text of the clauses chosen in step 1}");
+$("#lib").innerHTML=Object.entries(CLAUSES).map(([id,c])=>`<details><summary>${esc(id)} · ${esc(c.title)}</summary><div class="full">${esc(c.text)}</div></details>`).join("");
+
+// ---------- verifier ----------
+const DIG={"०":0,"१":1,"२":2,"३":3,"४":4,"५":5,"६":6,"७":7,"८":8,"९":9,"೦":0,"೧":1,"೨":2,"೩":3,"೪":4,"೫":5,"೬":6,"೭":7,"೮":8,"೯":9,"௦":0,"௧":1,"௨":2,"௩":3,"௪":4,"௫":5,"௬":6,"௭":7,"௮":8,"௯":9};
+const asciiDigits=s=>String(s).replace(/[०-९೦-೯௦-௯]/g,c=>DIG[c]);
+const norm=s=>String(s).toLowerCase().replace(/[’‘`]/g,"'").replace(/[“”]/g,'"').replace(/[–—]/g,"-").replace(/\s+/g," ").trim();
+const nums=s=>(asciiDigits(s).replace(/(\d),(?=\d)/g,"$1").match(/\d+(?:\.\d+)?/g)||[]).map(x=>String(Number(x)));
+const BANNED=/\b(you should|we recommend|i recommend|i suggest|best plan|best option|best for you|you must|guaranteed|don'?t worry)\b/i;
+function verify(draft,ids,question){
+ const log=[];let ok=true;const add=(pass,msg)=>{log.push({pass,msg});if(!pass)ok=false};
+ if(!draft||typeof draft!=="object"){add(false,"The draft was not valid JSON");return{ok,log}}
+ if(draft.cannot_answer){add(false,"Claude said the clauses don't answer this");return{ok,log,cannot:true}}
+ const cits=Array.isArray(draft.citations)?draft.citations:[];
+ add(cits.length>0,`${cits.length} citation(s) given`);
+ for(const c of cits){
+  const inSet=ids.includes(c.clause_id)&&CLAUSES[c.clause_id];
+  add(!!inSet,`Clause ${c.clause_id} was one of the clauses sent`);
+  if(!inSet) continue;
+  const q=norm(c.quote||""), words=q.split(" ").filter(Boolean).length;
+  add(words>=4&&norm(CLAUSES[c.clause_id].text).includes(q),`Quote from ${c.clause_id} appears word for word (${words} words)`);
+ }
+ const allowed=new Set([...nums(cits.map(c=>CLAUSES[c.clause_id]?CLAUSES[c.clause_id].text:"").join(" ")),...nums(QUOTE_FACTS.join(" ")),...nums(question)]);
+ [30,24,36,60].forEach(m=>{allowed.add(String(m+1))});
+ const bad=[...nums(draft.answer_en||""),...nums(draft.answer||"")].filter(n=>!allowed.has(n));
+ add(bad.length===0,bad.length?`Ungrounded number(s): ${[...new Set(bad)].join(", ")}`:"Every number is in the clauses, the quote or the question");
+ const adv=(draft.answer_en||"").match(BANNED);
+ add(!adv,adv?`Advice phrase found: "${adv[0]}"`:"No advice phrases");
+ const wc=(draft.answer_en||"").split(/\s+/).filter(Boolean).length;
+ add(wc>0&&wc<=120,`English answer is ${wc} words`);
+ return{ok,log};
+}
+// ---------- offline router (no Claude) ----------
+const KW=[[/(should|which plan|recommend|best|better|buy or not|compare)/i,"advice"],[/(medicine|tablet|treatment for|symptom|is it serious|doctor)/i,"medical"]];
+const KMAP=[[/(bp|blood pressure|pre-?existing|declared|diabetes|thyroid)/i,"4.1.1"],[/(cataract|hernia|stone|knee|listed|specified)/i,"4.1.2"],[/(30 days|first month|day one|first day|initial)/i,"4.1.3"],[/(didn.?t declare|not declare|hide|disclos)/i,"5.1.1"],[/(cancel|free look|refund)/i,"5.1.16"],[/(add|father|spouse|wife|husband|member)/i,"5.2.7"],[/(room|icu)/i,"3.2.2"],[/(loading|extra premium|counter)/i,"5.2.14"],[/(port|switch)/i,"5.2.13"],[/(renew)/i,"5.1.13"],[/(cashless)/i,"6.1.3"],[/(reimburs)/i,"6.1.4"],[/(dental|cosmetic|exclu)/i,"4.2.3"],[/(moratorium|5 years|five years)/i,"Def 33"]];
+function offlineRoute(q){for(const [r,c] of KW) if(r.test(q)) return{category:c,clause_ids:[]};const ids=[];for(const [r,id] of KMAP) if(r.test(q)&&!ids.includes(id)) ids.push(id);return{category:ids.length?"policy":"other",clause_ids:ids.slice(0,2)}}
+
+// ---------- UI ----------
+let sample=null,dict=null,tts=null,lastLog=null;
+const chat=$("#chat");
+function bubble(cls,html){const d=document.createElement("div");d.className="msg "+cls;d.innerHTML=html;chat.appendChild(d);d.scrollIntoView({behavior:"smooth",block:"end"});return d}
+function highlight(text,quote){const i=norm(text).indexOf(norm(quote));if(i<0)return esc(text.slice(0,500));
+ // map normalized index back approximately by searching words
+ const words=quote.trim().split(/\s+/);const re=new RegExp(words.map(w=>w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("\\s+"),"i");const m=text.match(re);
+ if(!m) return esc(text.slice(0,500));const s=Math.max(0,m.index-160),e=Math.min(text.length,m.index+m[0].length+160);
+ return (s>0?"… ":"")+esc(text.slice(s,m.index))+"<mark>"+esc(m[0])+"</mark>"+esc(text.slice(m.index+m[0].length,e))+(e<text.length?" …":"")}
+function citeHTML(id,quote){const c=CLAUSES[id];return `<div class="cite"><div class="cl">${T("clause")} ${esc(id)} · ${esc(c.title)}</div><div>${quote?highlight(c.text,quote):esc(c.text.slice(0,420))+(c.text.length>420?" …":"")}</div><details><summary>${T("full")}</summary><div class="full">${esc(c.text)}</div></details></div>`}
+function actions(text){const a=document.createElement("div");a.className="act";
+ if(tts&&text){const b=document.createElement("button");b.className="btn";b.type="button";b.innerHTML=`🔊 ${T("listen")}`;b.onclick=()=>{tts.speak(text,{language:LANG}).catch(()=>{})};a.appendChild(b)}
+ const h=document.createElement("button");h.className="btn";h.type="button";h.textContent=T("handover");h.onclick=()=>{const n=document.createElement("div");n.className="notice";n.textContent=T("handed");a.after(n);h.disabled=true};a.appendChild(h);return a}
+function renderLog(log){lastLog=log;$("#lastlog").innerHTML=log?`<ul style="margin:0;padding-left:18px">${log.map(l=>`<li style="color:${l.pass?"var(--ok)":"var(--warn)"}">${l.pass?"✓":"✗"} ${esc(l.msg)}</li>`).join("")}</ul>`:"No checks: this reply is fixed text."}
+function hint(id,q){const t=CLAUSES[id].text;const ws=(q||"").toLowerCase().match(/[a-z]{5,}/g)||[];for(const w of ws){const stem=w.slice(0,6);const i=t.toLowerCase().indexOf(stem);if(i>=0){const m=t.slice(i).match(/^\S+(\s+\S+){0,5}/);if(m)return m[0]}}return null}
+function showFallback(msg,ids,q){const d=bubble("bot",`<div class="ans">${esc(msg)}</div>`+(ids.length?ids.map(id=>citeHTML(id,hint(id,q))).join(""):`<div class="notice">${esc(T("none"))}</div>`));d.appendChild(actions(null))}
+
+async function ask(q){
+ q=q.trim();if(!q)return;bubble("me",esc(q));$("#q").value="";
+ const wait=bubble("bot",`<span class="typing"><i></i><i></i><i></i></span> <span class="small muted">${esc(T("thinking"))}</span>`);
+ try{
+  let route;
+  if(sample){try{route=await sample.json(ROUTER(q),{modelTier:"quick",cache:false})}catch(e){route=null}}
+  if(!route||!route.category){route=offlineRoute(q);route._offline=true}
+  const ids=(route.clause_ids||[]).filter(id=>CLAUSES[id]).slice(0,3);
+  wait.remove();
+  if(route.category==="advice"||route.category==="medical"||route.category==="other"){
+   const d=bubble("bot",`<div class="ans">${esc(T(route.category))}</div>`);d.appendChild(actions(T(route.category)));renderLog(null);return}
+  if(!ids.length){showFallback(T("none"),[]);renderLog(null);return}
+  if(route._offline||!sample){showFallback(T("offline"),ids,q);renderLog([{pass:false,msg:"Claude isn't available in this view; showing the clause text"}]);return}
+  const w2=bubble("bot",`<span class="typing"><i></i><i></i><i></i></span> <span class="small muted">${esc(T("thinking"))}</span>`);
+  let draft=null;try{draft=await sample.json(ANSWER(route.question_en||q,LANG,ids),{modelTier:"default",cache:false})}catch(e){draft=null}
+  w2.remove();
+  const v=verify(draft,ids,q+" "+(route.question_en||""));renderLog(v.log);
+  if(!v.ok){showFallback(v.cannot?T("none"):T("fallback"),ids,(route.question_en||"")+" "+q);return}
+  const shown=LANG==="en"?draft.answer_en:(draft.answer||draft.answer_en);
+  const cited=[...new Set(draft.citations.map(c=>c.clause_id))];
+  const d=bubble("bot",`<div class="ans">${esc(shown)}</div>`+cited.map(id=>citeHTML(id,draft.citations.find(c=>c.clause_id===id).quote)).join("")+
+   `<div class="checks"><span class="chk">✓ ${esc(T("ok1"))}</span><span class="chk">✓ ${esc(T("ok2"))}</span><span class="chk">✓ ${esc(T("ok3"))}</span></div>`);
+  d.appendChild(actions(shown));
+ }catch(e){wait.remove();showFallback(T("fallback"),[])}
+}
+function applyLang(){
+ const ids={reset:"t-reset",title:"t-title",tab1:"t-tab1",tab2:"t-tab2",yourquote:"t-yourquote",only:"t-only",members:"t-members",si:"t-si",declared:"t-declared",waits:"t-waits"};
+ for(const [k,id] of Object.entries(ids)) document.getElementById(id).textContent=T(k);
+ $("#q").placeholder=T("ph");document.documentElement.lang=LANG;
+ $("#chips").innerHTML=T("chips").map(c=>`<button type="button" class="chip">${esc(c)}</button>`).join("");
+ document.querySelectorAll(".chip").forEach(b=>b.onclick=()=>ask(b.textContent));
+}
+$("#lang").onchange=e=>{LANG=e.target.value;applyLang();bubble("bot",`<div class="ans">${esc(T("hello"))}</div>`)};
+$("#form").onsubmit=e=>{e.preventDefault();ask($("#q").value)};
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tabs button").forEach(x=>x.classList.toggle("on",x===b));$("#v-chat").classList.toggle("hide",b.dataset.tab!=="chat");$("#v-how").classList.toggle("hide",b.dataset.tab!=="how")});
+function resetChat(){try{tts&&tts.stop()}catch(e){};chat.innerHTML="";$("#q").value="";bubble("bot",`<div class="ans">${esc(T("hello"))}</div>`);renderLog(null);$("#lastlog").textContent="Ask a question first."}
+$("#reset").onclick=resetChat;
+applyLang();bubble("bot",`<div class="ans">${esc(T("hello"))}</div>`);renderLog(null);$("#lastlog").textContent="Ask a question first.";
+
+// capabilities (light up when available)
+(async()=>{
+ if(!window.claude||!claude.use) {$("#status").textContent="Offline view: answers show the policy text directly.";return}
+ sample=await claude.use("sample");
+ $("#status").textContent=sample?"":"Offline view: answers show the policy text directly.";
+ dict=await claude.use("dictation");
+ if(dict){const mic=$("#mic");mic.classList.remove("hide");let base="";
+  dict.onPartial(({text})=>{$("#q").value=(base+" "+text).trim()});
+  dict.onFinal(({text})=>{base=(base+" "+text).trim();$("#q").value=base});
+  dict.onState(({state})=>{mic.classList.toggle("rec",state==="listening");if(state!=="listening"&&base){const q=base;base="";ask(q)}});
+  mic.onclick=()=>{if(mic.classList.contains("rec")){dict.stop().catch(()=>{});return}base="";dict.start().catch(()=>{mic.classList.add("hide")})}}
+ tts=await claude.use("tts");
+})();
+</script>
+</body>
+</html>

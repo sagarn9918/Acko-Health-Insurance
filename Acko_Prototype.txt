@@ -1,0 +1,164 @@
+ROLE AND GOAL
+You are a senior product designer and front-end engineer at a digital-first Indian health insurer. Build a high-fidelity, clickable prototype of a first-time health insurance purchase journey, from quote to payment, that helps buyers understand what they will pay and when the plan would not pay, and lets them decide with their family. It is a concept prototype for a product management capstone.
+
+Show a slim, low-contrast banner at the very top of every screen: "Concept prototype for an Airtribe PM capstone. Not affiliated with any insurer. Sample data only." Use the neutral wordmark "Cover+" (text only, purple). Do not use any real insurer's name or logo.
+
+------------------------------------------------------------
+1. DESIGN LANGUAGE (follow closely)
+------------------------------------------------------------
+Overall feel: modern Indian insurtech. Calm, friendly, conversational. One question per screen. Generous white space. Soft lavender page background with white rounded cards.
+
+Colour tokens
+- Page background: #F6F4FC (soft lavender)
+- Card background: #FFFFFF; card border: #ECE8F7; card radius 16px; subtle shadow 0 2px 12px rgba(40,20,90,0.06)
+- Brand purple (highlights, active states, links, tags): #6B3FE4; light purple tint for pills and tags: #EFE9FD
+- Primary CTA: solid black #111111 with white text, full width within the card, 48px height, radius 10px
+- Selected option: green #1FA45B radio or check, light green row tint #EAF7EF
+- Positive deltas and confirmations: green #1FA45B
+- Savings tag: red #E5484D background with white text, small pill
+- Body text: #121212; secondary text: #5E5B66; dividers: #EEEAF5
+
+Typography
+- Clean geometric sans-serif (Inter or Manrope)
+- Screen question: 22-24px, semi-bold, conversational ("Great. What's your name?", "Where do you live?")
+- Key words in the question are highlighted in brand purple (for example "Does your workplace offer health insurance?" with "workplace" in purple)
+- Body 14-15px; helper text 12-13px secondary colour
+
+Layout (desktop and tablet)
+- Two-column card: a left vertical section stepper (about 30% width) and the question area on the right
+- Stepper sections, in order: 1 Family details, 2 Existing policy, 3 Coverage, 4 Health conditions, 5 Select plan and customise, 6 Review and pay
+- Completed sections show a small check; the active section is a purple tinted pill; upcoming sections are grey
+Layout (mobile, 390px)
+- The stepper collapses into a thin top progress bar with the current section name
+- The black CTA sticks to the bottom of the screen
+
+Components
+- Option rows: full-width rows with label on the left and a radio on the right; selected row turns light green with a green radio
+- Text inputs with small label above, rounded 10px
+- Info card: light purple tint with a small icon (for example "We found 106 cashless hospitals near you" with a "View all network hospitals" link)
+- Recommendation card with a purple "Our recommendation" tag at the top
+- Sum insured slider with labelled stops and green price deltas under each stop (for example "+Rs 63/m")
+- Collapsible sections with a chevron ("Your selected plan", "Plan summary")
+- Bottom sheets for definitions, sharing and explanations
+- Term definitions: any insurance term (waiting period, pre-existing condition, exclusion, loading, moratorium, free look) has a dotted purple underline; tapping it opens a bottom sheet with a one-sentence plain-language definition
+
+Tone of copy
+- Short, warm, second person ("you", "your mother")
+- Every statement about cover is plain language and honest; never say "you don't have to pay anything" without saying when you would
+
+------------------------------------------------------------
+2. SAMPLE DATA (fixed, illustrative)
+------------------------------------------------------------
+- Buyer: Rohan, 27. Members: Self (27) and Mother (55). Pincode 560001.
+- Mother has declared a pre-existing condition: high blood pressure.
+- Sum insured options: Rs 10L, Rs 25L (recommended), Rs 50L, Rs 1Cr.
+- Price at Rs 25L: Rs 14,500 per year or Rs 1,260 per month. Per member: Self Rs 5,200; Mother Rs 9,300.
+- Waiting periods (sample values): illnesses in the first 30 days not covered (accidents covered from day 1); listed conditions such as cataract, hernia, kidney stones and joint replacement: 24 months; pre-existing conditions: 36 months; after 60 months of continuous cover, claims can't be questioned for non-disclosure except proven fraud.
+- No add-ons, no co-pay and no room-rent limit on this plan.
+- Loading after health review (sample): 15% on Mother's premium = Rs 1,395; new total Rs 15,895 per year.
+
+------------------------------------------------------------
+3. FLOW AND SCREENS
+------------------------------------------------------------
+Label each screen in a small grey caption under the card: "Existing step" or "New". Keep existing steps visually identical in pattern to the design language above.
+
+FAMILY DETAILS
+S1 (Existing) "Great. What's your name?" Text input. Continue.
+S2 (Existing) "What's your mobile number?" Input with +91 prefix. Helper text: "We'll only use this to save your quote." Continue.
+S3 (Existing) "Enter the OTP sent to your number." 4-digit input. Continue.
+S4 (Existing) "Are you married?" Yes / No / I am divorced or widowed.
+
+EXISTING POLICY
+S5 (Existing) "Does your workplace offer health insurance?" Yes / No / I'm not sure.
+S6 (Existing) "Apart from that, have you or anyone in your family bought a health insurance policy?" options.
+
+COVERAGE
+S7 (Existing) "Select the members you would like to cover." Immediate family (Self, Spouse, Child with stepper) and Your elders (Mother, Father). Select Self and Mother.
+S8 (Existing) "Enter the age for the selected members." Self 27, Mother 55.
+S9 (Existing) "Where do you live?" Pincode input with green check, and the info card "We found 106 cashless hospitals near you".
+
+HEALTH CONDITIONS
+S10 (NEW element on an existing step) "Do you or your family have any pre-existing health conditions?" Per-member Yes / No / I'm not sure.
+Above the question, a purple-tint info card titled "Why we ask, and what can happen":
+  1. Declaring a condition doesn't mean you'll be refused.
+  2. We may add an extra charge (a loading), a longer waiting period, a limit or an exclusion for that condition. You'll see exactly what and why.
+  3. Not declaring a condition can lead to a claim being rejected.
+  4. After 5 years of continuous cover, a claim can't be questioned for non-disclosure, except in proven fraud.
+  Link: "Read the clause" (bottom sheet with the clause text).
+If Mother = Yes, show a condition picker; select "High blood pressure".
+S11 (Existing) "Have you been treated for these conditions?" Yes / No / I'm not sure.
+
+SELECT PLAN AND CUSTOMISE
+S12 (Existing) "Here's the sum insured we recommend for your family" card: Rs 25L, with a short reason. CTA "Check premium".
+S13 (NEW, redesigned plan recommendation) Top: recommendation card with the purple "Our recommendation" tag, plan name "Cover+ Health", "Sum insured Rs 25 lakh", "Covers: You, Mother", price "Rs 1,260/month".
+Below it, two cards side by side (stacked on mobile):
+  Left card, green ticks: "We pay 100% of the bill for covered treatment": surgery, tests, medicines, consumables like syringes and bandages.
+  Right card, titled "When you'd still pay", 5 rows each with a small icon and a purple "Clause" link:
+    1. Illness in the first 30 days (accidents are covered from day 1)
+    2. Listed conditions like cataract or hernia in the first 24 months
+    3. Mother's high blood pressure and related care in the first 36 months
+    4. Treatments the policy never covers, like dental or cosmetic
+    5. Any condition that wasn't declared
+    Link: "See all 16 listed conditions".
+  This card is collapsed to these 5 rows by default; nothing else is hidden.
+Below: "Your waiting-period timeline". One horizontal timeline per member (You, Mother) with markers: Day 1 accidents, Day 31 illnesses, Month 24 listed conditions, Month 36 pre-existing conditions (Mother only), Month 60 claims can't be questioned for non-disclosure.
+Below: "What would happen if..." carousel of 3 cards. Each card: situation, a pill result, and the clause.
+  a. "Mother needs cataract surgery in month 10" -> pill "You pay" (neutral grey) - listed condition, 24-month wait
+  b. "Mother needs cataract surgery in month 25" -> pill "Plan pays" (purple)
+  c. "You get dengue in week 2" -> pill "You pay" - first 30 days
+Actions: secondary outline button "Share with family", primary black "Customise premium".
+S14 (Existing step, extended) "See how your premium changes as you customise". Sum insured slider with stops Rs 10L, 25L (Recommended), 50L, 1Cr and green deltas. No add-ons.
+Below the slider, a "Price breakdown" card: Self Rs 5,200; Mother Rs 9,300 with a small amber-outline tag "May change after health review" and an info icon that opens the S10 explanation. Values update when the slider moves (sample: scale proportionally).
+The "When you'd still pay" card stays visible below.
+S15 (Existing) "Enter your information": full name, date of birth, gender, email.
+S16 (Existing) "Pick a payment option": Monthly (Rs 1,260 x 12) or Yearly (Rs 14,500) with a red "Save Rs 620" pill on Yearly.
+
+REVIEW AND PAY
+S17 (NEW, replaces the plain final review) Title "Before you pay: your plan on one screen". Collapsible but expanded by default:
+  - Who's covered; Sum insured and price
+  - When you'd still pay (the same 5 rows)
+  - Key waiting periods
+  - Free look: "You can cancel within 30 days of receiving your policy if you haven't made a claim."
+  - Links: "Customer Information Sheet", "Full policy wording"
+  - Optional "Quick check" card with 3 tap-to-answer questions, for example "Mother needs cataract surgery in month 10. Who pays?" Wrong answers show a one-line explanation. "Skip" is always available; it never blocks payment.
+  Actions: "Share with family" (outline) and "Pay now" (black).
+S18 (Existing) "Scan and complete autopay setup": UPI QR placeholder, mandate amount, start and end dates, UPI / Credit or debit card options. Show "Prototype: payment is simulated."
+
+AFTER APPLICATION
+S19 (NEW) Reached via "View application status" after payment. Card "Your application: one update for Mother".
+  Itemised: Base premium Rs 14,500; Loading for high blood pressure (Mother): 15% of Rs 9,300 = Rs 1,395; New total Rs 15,895 per year; Special conditions: none.
+  "Why: based on the health details you declared."
+  Buttons: "Accept and pay Rs 1,395" (black) and "Decline and get a full refund" (outline).
+  Helper text: "Please respond within 7 working days. If we don't hear from you, your application will be cancelled and your premium refunded."
+
+FAMILY SHARING (NEW)
+Share bottom sheet (from S13 and S17): choose language (English, Hindi, Kannada, Tamil) and format (WhatsApp link or PDF). Show a preview.
+Shared page (separate route, no login, mobile-first): "Rohan has shared a health plan with you". Members (first names only), sum insured, price, the "100% for covered treatment" card, the same 5 "When you'd still pay" rows, and a "Questions families ask" accordion:
+  - How much of the hospital bill will insurance pay?
+  - Will they actually pay when we need it?
+  - What is covered and what isn't?
+  - What about Mother's blood pressure?
+  - Can we switch insurer later without losing waiting-period credit?
+Footer: "This page shows plan terms only, never health details. Link expires in 14 days." Button "Continue this quote" returns to S13 with the same choices.
+For the Hindi version, translate at least the headings and the 5 "When you'd still pay" rows.
+
+ASK ABOUT THIS PLAN (phase 2 placeholder)
+A floating purple circular button with a microphone icon on S13 to S17, labelled "Ask about this plan". Tapping opens a bottom sheet: "Coming soon: ask questions by voice in English, Hindi, Kannada or Tamil. Answers come only from your policy wording and this quote." Show 2 example questions with fixed sample answers that each name the clause, for example "Is Mother's BP covered from day one?" -> "No. Pre-existing conditions are covered after 36 months of continuous cover (clause 4.1.1)."
+
+------------------------------------------------------------
+4. INTERACTION AND QUALITY BAR
+------------------------------------------------------------
+- Every screen has Back and a working primary CTA; the stepper updates as sections complete
+- Smooth, subtle transitions (150-200ms fade or slide); no flashy animation
+- All state kept in memory; no backend
+- Accessible: never rely on colour alone ("You pay" and "Plan pays" are written out), visible focus states, tap targets of at least 44px
+- Responsive at 390px (mobile) and 1280px (desktop)
+- Consistent spacing on an 8px grid; aligned cards; no lorem ipsum anywhere
+
+------------------------------------------------------------
+5. DO NOT
+------------------------------------------------------------
+- Do not use any real insurer's name, logo or trademark
+- Do not process real payments or collect real data
+- Do not use fear messaging, countdown timers or pushy pop-ups
+- Do not hide the "When you'd still pay" content behind extra screens
